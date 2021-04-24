@@ -1,6 +1,6 @@
 import requests as req
-import rsa
-from cryptography.fernet import Fernet
+import rsa #assimétrica
+from cryptography.fernet import Fernet # simétrica
 
 #variables
 target_address = 'http://0.0.0.0:43001/Bob'
@@ -56,7 +56,7 @@ def make_request(url, tor_package):
         return -1
 
 if __name__ == '__main__':
-    bob_pack = Wrap(bob_pk, 'null', 'Olá')
+    bob_pack = Wrap(bob_pk, 'null', 'Teste')
 
     server3_pack = Wrap(server_3_pk, target_address, str(bob_pack))
 

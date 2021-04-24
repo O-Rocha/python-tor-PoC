@@ -14,8 +14,7 @@ class TorPackage:
         return "{key}, {next}, {message}".format(key=self.encrypted_cypher_key, next=self.next_node, message=self.message)
 
 #auxiliary functions
-def peel(message, key):
-    enc = Fernet(key)
+def peel(message, enc):
     new_message = enc.decrypt(bytes(message, 'utf8')).decode()
 
     try:
@@ -28,7 +27,7 @@ def peel(message, key):
     if len(new_infos) == 3:  
         new_infos = new_message.split(',')
         new_pack = TorPackage(new_infos[0], new_infos[1], new_infos[2])
-    elif len(new_message) == 3 and type(new_message) == str:
+    elif len(new_infos) != 3 and type(new_message) == str:
         new_pack = TorPackage('', '', new_message)
     
     return new_pack
@@ -70,7 +69,9 @@ def Bob():
 
     server_sk = getPrivateKey('sk-bob.pem')
     cypher_key = rsa.decrypt(tor_pack.encrypted_cypher_key, server_sk)
-    new_tor_pack = peel(tor_pack.message, cypher_key)
+    enc = Fernet(cypher_key)
+
+    new_tor_pack = peel(tor_pack.message, enc)
     print('Mensagem enviada para Bob: {}'.format(new_tor_pack.message))
 
     return 'ok'

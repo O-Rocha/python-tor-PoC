@@ -35,7 +35,7 @@ def peel(message, enc):
     if len(new_infos) == 3:  
         new_infos = new_message.split(',')
         new_pack = TorPackage(new_infos[0], new_infos[1], new_infos[2])
-    elif len(new_message) == 3 and type(new_message) == str:
+    elif len(new_infos) != 3 and type(new_message) == str:
         new_pack = TorPackage('', '', new_message)
     
     return new_pack
